@@ -1,85 +1,256 @@
 # CampusBite Delivery Hub
 
-**Zambia University College of Technology (ZUT) — Object-Oriented Programming group project**
+**Zambia University College of Technology (ZUT) — Object-Oriented Programming Group Project**
 
-CampusBite is a small campus meal-ordering prototype. Students can browse available meals, submit orders with hostel/study-area delivery details, and view order progress. Vendors can add menu items and update order statuses.
+CampusBite is a campus meal-ordering prototype that allows students to browse available meals, place orders with hostel or study-area delivery details, and monitor order progress. Vendors can manage menu items, view customer orders and update order statuses.
 
-## Technology
+## 1. THE PROBLEM
+
+Students at Zambia University College of Technology (ZUT) may experience difficulties accessing meals conveniently while attending lectures, studying or staying in campus hostels. Food vendors may also struggle to manage customer orders, track order progress and maintain updated menus manually.
+
+CampusBite Delivery Hub addresses these challenges by providing a digital platform where students can browse available meals, place orders and monitor delivery progress, while vendors can manage food items and update order statuses.
+
+## 2. TECHNOLOGY STACK
+
 - Java 17
 - Javalin 6 REST API
-- SQLite persistence (`campusbite.db` is created automatically)
+- SQLite database for data persistence
 - Java Collections (`List` and `Map`) in the service layer
 - HTML, CSS and JavaScript front end
-- JUnit 5 tests
+- JUnit 5 testing framework
+- Apache Maven for dependency management and building
 
-## Requirements
-Install a JDK 17 or newer and Apache Maven. Check:
+## 3. HOW TO RUN
+
+Follow these steps to install and run the CampusBite Delivery Hub application.
+
+### Prerequisites
+
+Install the following software:
+
+- Java Development Kit (JDK) 17 or newer.
+- Apache Maven.
+- A modern web browser.
+
+Verify that Java and Maven are installed by running:
+
 ```bash
 java -version
 mvn -version
 ```
 
-## Run
-From this project folder:
+### Running the application
+
+**Step 1: Open the project**
+
+Open the `CampusBite-Delivery-Hub-Updated` folder in Visual Studio Code or your preferred Java IDE.
+
+**Step 2: Open the terminal**
+
+Make sure the terminal is in the project directory containing `pom.xml`.
+
+**Step 3: Run the tests**
+
+Execute:
+
 ```bash
 mvn clean test
+```
+
+This compiles the project and runs the JUnit 5 tests.
+
+**Step 4: Start the application**
+
+Execute:
+
+```bash
 mvn exec:java
 ```
-Open **http://localhost:7070** in your browser. The API health endpoint is `http://localhost:7070/api/health`.
 
-The database file is created in the project directory on first launch. Do not delete `campusbite.db` if you want to keep the saved records.
+**Step 5: Open the application**
 
-## Main API routes
+Open your web browser and visit:
+
+http://localhost:7070
+
+The API health endpoint is available at:
+
+http://localhost:7070/api/health
+
+**Database information:** The SQLite database file (`campusbite.db`) is automatically created in the project directory when the application starts. Do not delete this file if you want to preserve saved records.
+
+## 4. YOUR CLASSES
+
+The project uses Object-Oriented Programming principles to separate responsibilities between different parts of the application.
+
+The Java classes are organized according to their responsibilities:
+
+| Class Category | Responsibility |
+|---|---|
+| Model Classes | Represent application data, including students, food items and customer orders. |
+| Service Classes | Handle application business logic, validation, calculations and order management. |
+| Repository Classes | Manage database operations and store and retrieve application records using SQLite. |
+| Main Application Class | Configures and starts the Javalin server and registers the REST API endpoints. |
+| Test Classes | Test application functionality and verify that important operations work correctly. |
+
+The system uses Java Collections, including `List` and `Map`, to manage application data within the service layer.
+
+## 5. MAIN API ROUTES
+
 | Method | Route | Purpose |
 |---|---|---|
-| GET | `/api/health` | Check API |
+| GET | `/api/health` | Check API status |
 | GET | `/api/menu` | List menu items |
-| POST | `/api/menu` | Add menu item |
-| DELETE | `/api/menu/{id}` | Delete menu item |
-| PATCH | `/api/menu/{id}/availability` | Change availability |
-| GET | `/api/orders` | List orders |
+| POST | `/api/menu` | Add a menu item |
+| DELETE | `/api/menu/{id}` | Delete a menu item |
+| PATCH | `/api/menu/{id}/availability` | Change food availability |
+| GET | `/api/orders` | List customer orders |
 | POST | `/api/orders` | Place an order |
 | DELETE | `/api/orders/{id}` | Delete an order marked Delivered |
-| PATCH | `/api/orders/{id}/status` | Update order status (`PENDING`, `PREPARING`, `IN_TRANSIT`, `DELIVERED`) |
+| PATCH | `/api/orders/{id}/status` | Update order status |
 | GET | `/api/students` | List registered students |
 | POST | `/api/students` | Register a student |
 
-## Example requests
-Add a menu item:
+### Order statuses
+
+The system supports the following order statuses:
+
+- `PENDING`
+- `PREPARING`
+- `IN_TRANSIT`
+- `DELIVERED`
+
+## 6. EXAMPLE API REQUESTS
+
+### Add a menu item
+
 ```json
-{"itemName":"Chicken and rice","price":45.0,"isAvailable":true}
+{
+  "itemName": "Chicken and rice",
+  "price": 45.0,
+  "isAvailable": true
+}
 ```
-Register a student:
+
+### Register a student
+
 ```json
-{"name":"Example Student","phone":"0970000000","email":"student@example.com","hostelName":"Block A","roomNumber":"12"}
+{
+  "name": "Example Student",
+  "phone": "0970000000",
+  "email": "student@example.com",
+  "hostelName": "Block A",
+  "roomNumber": "12"
+}
 ```
-Place an order:
+
+### Place an order
+
 ```json
-{"studentId":1,"items":[{"foodItemId":1,"quantity":2}],"deliveryLocation":"Block A, Room 12","notes":"Call when outside"}
+{
+  "studentId": 1,
+  "items": [
+    {
+      "foodItemId": 1,
+      "quantity": 2
+    }
+  ],
+  "deliveryLocation": "Block A, Room 12",
+  "notes": "Call when outside"
+}
 ```
-Update an order:
+
+### Update an order
+
 ```json
-{"status":"PREPARING"}
-```
-Valid statuses are `PENDING`, `PREPARING`, `IN_TRANSIT`, and `DELIVERED`.
-
-## Important project notes
-- This is an academic prototype, not a live commercial delivery service.
-- It does not process online payments, provide GPS tracking, or send SMS notifications.
-- Before submitting, customise the names and contributions of your actual group members, confirm your lecturer's rubric, and test on your own computer.
-- Do not claim the project has been tested on your machine until you run `mvn clean test`.
-
-## Food photos and dashboard actions
-
-The vendor dashboard now supports uploading a food photo when creating a menu item. Supported formats are JPG, PNG, WEBP and GIF, up to 2 MB per image. The image is stored as a data URL in the SQLite `food_items.image_data` column, so it remains available after restarting the application. Existing databases are upgraded automatically when the application starts.
-
-Vendor dashboard actions include refreshing the menu/orders, deleting menu items, changing food availability, and moving orders through Preparing, On the way, and Delivered. Customers see a live order timeline with elapsed preparation and delivery times; it refreshes automatically every 15 seconds. The vendor marks when a carrier is on the way. This prototype does not collect GPS location or track a carrier's physical movement. Delivered orders can be deleted from the vendor dashboard; earlier order statuses cannot be deleted. Deleting a menu item removes it from the customer menu while preserving the item name and price in existing order history. The customer dashboard supports adding/removing meals from a basket and placing an order with delivery details.
-
-Run the application from the folder containing `pom.xml`:
-
-```powershell
-mvn clean test
-mvn exec:java
+{
+  "status": "PREPARING"
+}
 ```
 
-Then open `http://localhost:7070`. The vendor dashboard is available after signing in through Vendor Desk; the customer dashboard is available after signing in through Customer Desk.
+## 7. SYSTEM FEATURES
+
+### Student Dashboard
+
+- Browse available food items.
+- Add meals to a shopping basket.
+- Remove meals from the basket.
+- Place food orders.
+- Provide hostel and room delivery details.
+- View order progress through a live order timeline.
+
+### Vendor Dashboard
+
+- Add new food items to the menu.
+- Upload food photographs.
+- Delete menu items.
+- Change food availability.
+- View customer orders.
+- Update order statuses.
+- Refresh menu and order information.
+- Delete orders marked as Delivered.
+
+### Food Image Upload
+
+The vendor dashboard supports uploading food photographs in the following formats:
+
+- JPG
+- PNG
+- WEBP
+- GIF
+
+The maximum image size is 2 MB per image.
+
+Images are stored as data URLs in the SQLite `food_items.image_data` column, allowing them to remain available after restarting the application. Existing databases are upgraded automatically when the application starts.
+
+### Order Tracking
+
+The customer dashboard displays an order timeline with elapsed preparation and delivery times. It refreshes automatically every 15 seconds.
+
+The vendor marks when a carrier is on the way. This prototype does not collect GPS coordinates or track the carrier's physical movement.
+
+Deleting a menu item removes it from the customer menu while preserving the item name and price in existing order history.
+
+## 8. PROJECT LIMITATIONS
+
+CampusBite Delivery Hub is an academic prototype and not a live commercial delivery service.
+
+The current system:
+
+- Does not process online payments.
+- Does not provide GPS tracking.
+- Does not send SMS notifications.
+- Does not track a carrier's physical movement.
+- Uses local SQLite storage rather than a remote production database.
+
+## 9. GROUP MEMBERS
+
+The following students contributed to the development of the CampusBite Delivery Hub project.
+
+| No. | Full Name | Student ID |
+|:---:|---|:---:|
+| 1 | MAKULE CHILUPULA | 2410102 |
+| 2 | WILLIAM GONDWE | 2410426 |
+| 3 | KEZIA CHIMIA | 2410284 |
+| 4 | KONDWANI CHILONGO | 2410370 |
+| 5 | SAVIOUR MWAPE | 2410082 |
+
+## 10. ACADEMIC PROJECT INFORMATION
+
+**Institution:** Zambia University College of Technology (ZUT)
+
+**Project Name:** CampusBite Delivery Hub
+
+**Course:** Object-Oriented Programming
+
+**Programming Language:** Java 17
+
+**Backend Framework:** Javalin 6
+
+**Database:** SQLite
+
+**Project Type:** Group Academic Project
+
+---
+
+**CampusBite Delivery Hub — Making campus food ordering easier through technology.**
