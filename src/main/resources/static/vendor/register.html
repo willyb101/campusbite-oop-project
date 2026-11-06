@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Registration | Campus Bite</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Campus Bite</h1>
+        <h2>Register Your Business</h2>
+        <p>Join Campus Bite as a food vendor.</p>
+
+        <form id="vendorRegisterForm">
+            <label for="fullName">Owner's Full Name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+
+            <label for="businessName">Business Name</label>
+            <input type="text" id="businessName" name="businessName" placeholder="Enter business name" required>
+
+            <label for="email">Business Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter business email" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
+
+            <label for="location">Business Location</label>
+            <input type="text" id="location" name="location" placeholder="Enter campus location" required>
+
+            <label for="password">Create Password</label>
+            <input type="password" id="password" name="password" placeholder="Create a password" required>
+
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+
+            <button type="submit">Submit Registration</button>
+        </form>
+
+        <p>Already registered?
+            <a href="login.html">Vendor Login</a>
+        </p>
+
+        <a href="../index.html">Back to Home</a>
+    </div>
+
+    <script src="../auth.js"></script>
+    <script>
+        if (campusBiteAuth.getSession('vendor')) {
+            window.location.href = 'dashboard.html';
+        }
+
+        document.getElementById('vendorRegisterForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const fullName = document.getElementById('fullName').value.trim();
+            const businessName = document.getElementById('businessName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const location = document.getElementById('location').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            try {
+                campusBiteAuth.register('vendor', { name: fullName, businessName, email, phone, location, password });
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+    </script>
+</body>
+</html>
